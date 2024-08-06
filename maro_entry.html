@@ -21,11 +21,12 @@
         var firebaseConfig = {
             apiKey: "AIzaSyADUnObZVQ6jrw9gCUQaOV0OXVBdgTJm-E",
             authDomain: "bb-expense-calculator.firebaseapp.com",
-            databaseURL: "https://bb-expense-calculator.firebaseio.com",
+            databaseURL: "https://bb-expense-calculator-default-rtdb.firebaseio.com",
             projectId: "bb-expense-calculator",
             storageBucket: "bb-expense-calculator.appspot.com",
             messagingSenderId: "641752820262",
-            appId: "1:641752820262:web:54ac8a72acdbc62d28d4e7"
+            appId: "1:641752820262:web:54ac8a72acdbc62d28d4e7",
+            measurementId: "G-JHCF3J6X2Z"
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -40,8 +41,15 @@
             let expenseId = new Date().getTime(); // Use timestamp as unique ID
             database.ref('expenses/' + expenseId).set({
                 yourExpense: yourExpense
+            }, function(error) {
+                if (error) {
+                    console.error("Error saving data:", error); // Debug statement
+                    alert("Data could not be saved. " + error.message);
+                } else {
+                    console.log("Data saved successfully."); // Debug statement
+                    document.getElementById('link').innerText = `Share this link with Anny: https://shinm1994.github.io/expense-calculator/anny_entry.html?expenseId=${expenseId}`;
+                }
             });
-            document.getElementById('link').innerText = `Share this link with Anny: https://shinm1994.github.io/expense-calculator/anny_entry.html?expenseId=${expenseId}`;
         }
     </script>
 </body>
