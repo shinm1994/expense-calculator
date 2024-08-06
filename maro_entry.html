@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Split Calculator - Your Entry</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Enter Your Expenses</h1>
+    <label for="yourExpense">Your Expense:</label>
+    <input type="number" id="yourExpense" /><br />
+    <button onclick="saveExpenses()">Save and Generate Link</button>
+    <h2 id="link"></h2>
+
+    <script>
+        // Your Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyADUnObZVQ6jrw9gCUQaOV0OXVBdgTJm-E",
+            authDomain: "bb-expense-calculator.firebaseapp.com",
+            databaseURL: "https://bb-expense-calculator.firebaseio.com",
+            projectId: "bb-expense-calculator",
+            storageBucket: "bb-expense-calculator.appspot.com",
+            messagingSenderId: "641752820262",
+            appId: "1:641752820262:web:54ac8a72acdbc62d28d4e7"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var database = firebase.database();
+
+        function saveExpenses() {
+            let yourExpense = parseFloat(document.getElementById('yourExpense').value);
+            if (isNaN(yourExpense) || yourExpense <= 0) {
+                alert("Please enter a valid expense amount.");
+                return;
+            }
+            let expenseId = new Date().getTime(); // Use timestamp as unique ID
+            database.ref('expenses/' + expenseId).set({
+                yourExpense: yourExpense
+            });
+            document.getElementById('link').innerText = `Share this link with Anny: ${window.location.origin}/anny_entry.html?expenseId=${expenseId}`;
+        }
+    </script>
+</body>
+</html>

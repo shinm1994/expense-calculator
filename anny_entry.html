@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Split Calculator - Anny's Entry</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Enter Your Expenses and Pick a Number</h1>
+    <label for="annyExpense">Your Expense:</label>
+    <input type="number" id="annyExpense" /><br />
+    <label for="numberPicked">Number Picked (0-10):</label>
+    <input type="number" id="numberPicked" min="0" max="10" /><br />
+    <button onclick="calculateContribution()">Calculate</button>
+    <h2 id="result"></h2>
+
+    <script>
+        // Your Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyADUnObZVQ6jrw9gCUQaOV0OXVBdgTJm-E",
+            authDomain: "bb-expense-calculator.firebaseapp.com",
+            databaseURL: "https://bb-expense-calculator.firebaseio.com",
+            projectId: "bb-expense-calculator",
+            storageBucket: "bb-expense-calculator.appspot.com",
+            messagingSenderId: "641752820262",
+            appId: "1:641752820262:web:54ac8a72acdbc62d28d4e7"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var database = firebase.database();
+
+        function calculateContribution() {
+            let urlParams = new URLSearchParams(window.location.search);
+            let expenseId = urlParams.get('expenseId');
+            if (!expenseId) {
+                alert("No expense ID found. Please ensure the link is correct.");
+                return;
+            }
+
+            database.ref('expenses/' + expenseId).once('value').then(function(snapshot) {
+                if (!snapshot.exists()) {
+                    alert("No data found for the given expense ID.");
+                    return;
+                }
+
+                let yourExpense = snapshot.val().yourExpense;
+                let annyExpense = parseFloat(document.getElementById('annyExpense').value);
+                let numberPicked = parseInt(document.getElementById('numberPicked').value);
+
+                if (isNaN(annyExpense) || annyExpense < 0) {
+                    alert("Please enter a valid expense amount.");
+                    return;
+                }
+
+                if (isNaN(numberPicked) || numberPicked < 0 || numberPicked > 10) {
+                    alert("Please pick a number between 0 and 10.");
+                    return;
+                }
+
+                let netEachPays = (yourExpense - annyExpense) / 2;
+                let baseContribution = 0.2 * netEachPays;
+                let additionalContribution = numberPicked * 0.05 * baseContribution;
+                let totalContribution = baseContribution + additionalContribution;
+
+                document.getElementById('result').innerText = `Anny's total contribution: $${totalContribution.toFixed(2)}`;
+            }).catch(function(error) {
+                alert("An error occurred: " + error.message);
+            });
+        }
+    </script>
+</body>
+</html>
