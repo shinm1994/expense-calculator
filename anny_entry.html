@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Expense Split Calculator - BB's Entry</title>
+    <title>Expense Split Calculator - Anny's Entry</title>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
-        input, button { margin: 5px 0; transition: transform 0.2s ease-in-out; }
-        input:hover, button:hover { transform: scale(1.1); }
+        input, button { margin: 5px 0; transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; }
+        input:hover, button:hover { transform: rotate(10deg) scale(1.1); box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
         h1, label, input, button { animation: fadeIn 2s; }
         button { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-        button:hover { background-color: #45a049; }
+        button:hover { background-color: #45a049; animation: wiggle 0.5s; }
     </style>
 </head>
 <body>
-    <h1>Hello, BB. Enter Your Expenses and Pick a Number hehe</h1>
+    <h1>Hi BB. Enter Your Expenses and Pick a Number</h1>
     <label for="annyExpense">Your Expense:</label>
     <input type="number" id="annyExpense" /><br />
     <label for="numberPicked">Number Picked (0-10):</label>
@@ -81,12 +85,16 @@
                 console.log("Net Each Pays:", netEachPays); // Debug statement
                 let baseContribution = 0.2 * netEachPays;
                 console.log("Base Contribution:", baseContribution); // Debug statement
-                let additionalContribution = numberPicked * 0.05 * baseContribution;
+
+                // Generate a random percentage between 0 and 50
+                let randomPercentage = Math.random() * 50;
+                console.log("Random Percentage:", randomPercentage); // Debug statement
+                let additionalContribution = (randomPercentage / 100) * baseContribution;
                 console.log("Additional Contribution:", additionalContribution); // Debug statement
                 let totalContribution = baseContribution + additionalContribution;
                 console.log("Total Contribution:", totalContribution); // Debug statement
 
-                document.getElementById('result').innerText = `Anny's total contribution: $${totalContribution.toFixed(2)}`;
+                document.getElementById('result').innerText = `Anny's total contribution: $${totalContribution.toFixed(2)} (with ${randomPercentage.toFixed(2)}% extra)`;
             }).catch(function(error) {
                 console.error("Error:", error); // Debug statement
                 alert("An error occurred: " + error.message);
