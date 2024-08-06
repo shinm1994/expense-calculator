@@ -6,7 +6,15 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
-        input { margin: 5px 0; }
+        input, button { margin: 5px 0; transition: transform 0.2s ease-in-out; }
+        input:hover, button:hover { transform: scale(1.1); }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h1, label, input, button { animation: fadeIn 2s; }
+        button { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
     </style>
 </head>
 <body>
@@ -40,6 +48,8 @@
             }
             let expenseId = new Date().getTime(); // Use timestamp as unique ID
             console.log("Saving expense with ID:", expenseId, " and value:", yourExpense); // Debug statement
+
+            // Save data to Firebase
             database.ref('expenses/' + expenseId).set({
                 yourExpense: yourExpense
             }, function(error) {
@@ -49,6 +59,15 @@
                 } else {
                     console.log("Data saved successfully with ID:", expenseId); // Debug statement
                     document.getElementById('link').innerText = `Share this link with Anny: https://shinm1994.github.io/expense-calculator/anny_entry.html?expenseId=${expenseId}`;
+                }
+            });
+
+            // Verify data was saved
+            database.ref('expenses/' + expenseId).once('value', function(snapshot) {
+                if (snapshot.exists()) {
+                    console.log("Data verified as saved:", snapshot.val());
+                } else {
+                    console.error("Data not found after saving.");
                 }
             });
         }

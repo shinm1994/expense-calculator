@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Expense Split Calculator - Anny's Entry</title>
+    <title>Expense Split Calculator - BB's Entry</title>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
-        input { margin: 5px 0; }
+        input, button { margin: 5px 0; transition: transform 0.2s ease-in-out; }
+        input:hover, button:hover { transform: scale(1.1); }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h1, label, input, button { animation: fadeIn 2s; }
+        button { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
     </style>
 </head>
 <body>
-    <h1>Enter Your Expenses and Pick a Number</h1>
+    <h1>Hello, BB. Enter Your Expenses and Pick a Number hehe</h1>
     <label for="annyExpense">Your Expense:</label>
     <input type="number" id="annyExpense" /><br />
     <label for="numberPicked">Number Picked (0-10):</label>
