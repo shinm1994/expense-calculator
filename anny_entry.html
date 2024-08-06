@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Expense Split Calculator - BB's Entry</title>
+    <title>Expense Split Calculator - Anny's Entry</title>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <style>
@@ -10,7 +10,7 @@
     </style>
 </head>
 <body>
-    <h1>Hi bb! Enter Your Expenses and Pick a Number</h1>
+    <h1>Enter Your Expenses and Pick a Number</h1>
     <label for="annyExpense">Your Expense:</label>
     <input type="number" id="annyExpense" /><br />
     <label for="numberPicked">Number Picked (0-10):</label>
@@ -34,22 +34,29 @@
         var database = firebase.database();
 
         function calculateContribution() {
+            console.log("Calculate button clicked"); // Debug statement
             let urlParams = new URLSearchParams(window.location.search);
             let expenseId = urlParams.get('expenseId');
+            console.log("Expense ID from URL:", expenseId); // Debug statement
             if (!expenseId) {
                 alert("No expense ID found. Please ensure the link is correct.");
                 return;
             }
 
             database.ref('expenses/' + expenseId).once('value').then(function(snapshot) {
+                console.log("Snapshot value:", snapshot.val()); // Debug statement
                 if (!snapshot.exists()) {
                     alert("No data found for the given expense ID.");
                     return;
                 }
 
                 let yourExpense = snapshot.val().yourExpense;
+                console.log("Your Expense from DB:", yourExpense); // Debug statement
                 let annyExpense = parseFloat(document.getElementById('annyExpense').value);
                 let numberPicked = parseInt(document.getElementById('numberPicked').value);
+
+                console.log("Anny's Expense:", annyExpense); // Debug statement
+                console.log("Number Picked:", numberPicked); // Debug statement
 
                 if (isNaN(annyExpense) || annyExpense < 0) {
                     alert("Please enter a valid expense amount.");
@@ -62,12 +69,17 @@
                 }
 
                 let netEachPays = (yourExpense - annyExpense) / 2;
+                console.log("Net Each Pays:", netEachPays); // Debug statement
                 let baseContribution = 0.2 * netEachPays;
+                console.log("Base Contribution:", baseContribution); // Debug statement
                 let additionalContribution = numberPicked * 0.05 * baseContribution;
+                console.log("Additional Contribution:", additionalContribution); // Debug statement
                 let totalContribution = baseContribution + additionalContribution;
+                console.log("Total Contribution:", totalContribution); // Debug statement
 
                 document.getElementById('result').innerText = `Anny's total contribution: $${totalContribution.toFixed(2)}`;
             }).catch(function(error) {
+                console.error("Error:", error); // Debug statement
                 alert("An error occurred: " + error.message);
             });
         }
